@@ -1,0 +1,108 @@
+# Import necessary libraries
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+import matplotlib.pyplot as plt
+
+# Set a random seed for reproducibility
+np.random.seed(42)
+
+# Create random home sizes (in square feet) and home values (in thousands of dollars)
+home_size = np.random.randint(1000, 4000, 100)  # Random sizes between 1000 and 4000 sq. ft.
+home_value = np.random.randint(100, 1000, 100)  # Random values between 100 and 1000 (in $1000s)
+
+# Home prices (target variable) with some added noise
+home_price = 200 * home_size + 50 * home_value + np.random.normal(0, 10000, 100)
+
+# Create a DataFrame to hold this data
+data = pd.DataFrame({
+    'HomeSize': home_size,
+    'HomeValue': home_value,
+    'HomePrice': home_price
+})
+
+# Display the first few rows of the dataset
+print("Sample Data:")
+print(data.head())
+
+# Split the data into independent variables (X) and the dependent variable (y)
+X = data[['HomeSize', 'HomeValue']]  # Independent variables
+y = data['HomePrice']  # Dependent variable
+
+# Split the dataset into 80% training data and 20% testing data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Initialize the LinearRegression model
+model = LinearRegression()
+
+# Fit the model using the training data
+model.fit(X_train, y_train)
+
+# Get the coefficients (slopes) and intercept
+coefficients = model.coef_
+intercept = model.intercept_
+
+print("\nModel Coefficients:")
+print(f"Home Size Coefficient: {coefficients[0]}")
+print(f"Home Value Coefficient: {coefficients[1]}")
+print(f"Intercept: {intercept}")
+
+# Use the model to predict home prices on the test set
+y_pred = model.predict(X_test)
+
+# Evaluate the model
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+print("\nModel Evaluation:")
+print(f"Mean Squared Error (MSE): {mse}")
+print(f"R-squared (R2): {r2}")
+
+# Plot the actual vs predicted home prices for visualization
+plt.figure(figsize=(10, 6))
+plt.scatter(y_test, y_pred, edgecolor='k', alpha=0.75)
+plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', lw=2)  # Line for perfect predictions
+plt.xlabel('Actual Prices')
+plt.ylabel('Predicted Prices')
+plt.title('Actual vs Predicted Home Prices')
+plt.show()
+
+import matplotlib.pyplot as plt
+
+# Plot the actual vs predicted home prices for visualization
+plt.figure(figsize=(10, 6))
+plt.scatter(y_test, y_pred, edgecolor='k', alpha=0.75)
+plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', lw=2)  # Line for perfect predictions
+plt.xlabel('Actual Prices')
+plt.ylabel('Predicted Prices')
+plt.title('Actual vs Predicted Home Prices')
+plt.show()
+
+# Import necessary libraries (if not already imported)
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+import matplotlib.pyplot as plt
+
+# Assuming the model has already been trained (from the previous steps)
+
+# Assuming the model has already been trained (from the previous steps)
+
+# Now we prompt the user to enter a home size
+home_size_input = float(input("Enter the home size in square feet: "))
+
+# We will assume a fixed home value, for example $500k
+fixed_home_value = 500  # Home value in thousands of dollars
+
+# Organize the input into the same format that the model expects (2D array)
+user_input = np.array([[home_size_input, fixed_home_value]])
+
+# Use the trained model to predict the home price
+predicted_price = model.predict(user_input)
+
+# Display the predicted price
+print(f"The predicted home price for a home with size {home_size_input} sq. ft. and fixed value $500k is: ${predicted_price[0]:,.2f}")
